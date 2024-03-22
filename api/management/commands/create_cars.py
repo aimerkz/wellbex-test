@@ -16,11 +16,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         cnt_cars = kwargs.get('cnt_cars')
-        locations = self.get_location_random_instanses(cnt_cars)
+        locations = self.get_location_random_instances(cnt_cars)
         self.create_cars(locations)
 
     @staticmethod
-    def get_location_random_instanses(cnt_cars: int) -> List[Location]:
+    def get_location_random_instances(cnt_cars: int) -> List[Location]:
         location_random_instances = []
         locations = Location.objects.all()
         for _ in range(cnt_cars):
