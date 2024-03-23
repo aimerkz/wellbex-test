@@ -1,7 +1,10 @@
+from django_filters import rest_framework as filters
+
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.response import Response
 
+from api.filters import WeightFilter
 from api.models import Goods, Car
 from api.serializers import GoodsCreateSerializer, GoodsListSerializer, CarUpdateSerializer, GoodsUpdateSerializer
 from api.services import GoodsRepo, get_goods_with_number_of_nearby_cars, get_detail_goods_qs, CarRepo
@@ -12,14 +15,19 @@ class ListCreateGoodsView(ListCreateAPIView):
     serializer_class = GoodsCreateSerializer
     queryset = Goods.objects.all()
     http_method_names = ['get', 'post']
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = WeightFilter
 
     def get_serializer_class(self, *args, **kwargs):
         if self.request.method == 'GET':
             return GoodsListSerializer
         return self.serializer_class
 
+    def get_queryset(self):
+        return self.filter_queryset(self.queryset)
+
     def list(self, request, *args, **kwargs):
-        queryset = self.queryset.select_related('location_pick_up', 'location_delivery')
+        queryset = self.get_queryset().select_related('location_pick_up', 'location_delivery')
         res = get_goods_with_number_of_nearby_cars(queryset)
         serializer = self.get_serializer(res, many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)

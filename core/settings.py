@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'drf_spectacular',
     'api'
 ]
@@ -85,7 +86,10 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S'
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
