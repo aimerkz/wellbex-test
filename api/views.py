@@ -1,10 +1,10 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.response import Response
 
-from api.models import Goods
-from api.serializers import GoodsCreateSerializer, GoodsListSerializer
-from api.services import GoodsRepo, get_goods_with_number_of_nearby_cars, get_detail_goods_qs
+from api.models import Goods, Car
+from api.serializers import GoodsCreateSerializer, GoodsListSerializer, CarUpdateSerializer
+from api.services import GoodsRepo, get_goods_with_number_of_nearby_cars, get_detail_goods_qs, CarRepo
 
 
 class CreateGoodsView(ListCreateAPIView):
@@ -48,3 +48,23 @@ class RetrieveGoodsView(RetrieveAPIView):
         res = get_goods_with_number_of_nearby_cars(instance_qs)
         serializer = self.get_serializer(res.first())
         return Response(status=status.HTTP_200_OK, data=serializer.data)
+
+
+class UpdateCarView(UpdateAPIView):
+
+    http_method_names = ['put']
+    serializer_class = CarUpdateSerializer
+    queryset = Car.objects.all()
+    lookup_url_kwarg = 'id'
+
+    def update(self, request, *args, **kwargs):
+        car_instance = self.get_object()
+        serializer = self.get_serializer(car_instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        CarRepo(
+            car_instance,
+            serializer.validated_data.pop('zip_code'),
+            serializer.validated_data.pop('unique_number'),
+            serializer.validated_data.pop('carrying')
+        ).update_car()
+        return Response(status=status.HTTP_200_OK)
