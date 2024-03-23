@@ -28,6 +28,23 @@ class GoodsRepo:
         )
 
 
+class CarRepo:
+
+    def __init__(self, car: Car, zip_code: int, unique_number: str, carrying: int):
+        self.car = car
+        self.zip_code = zip_code
+        self.unique_number = unique_number
+        self.carrying = carrying
+
+    def update_car(self) -> Car:
+        location = get_location_by_zip_code(self.zip_code)
+        self.car.current_location = location
+        self.car.unique_number = self.unique_number
+        self.car.carrying = self.carrying
+        self.car.save()
+        return self.car
+
+
 def get_detail_goods_qs(pk: int) -> QuerySet[Goods]:
     goods_qs = Goods.objects.select_related('location_pick_up', 'location_delivery').filter(pk=pk)
     if not goods_qs.exists():

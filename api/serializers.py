@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import Goods, Location
+from api.models import Goods, Location, Car
 
 
 class GoodsCreateSerializer(serializers.Serializer):
@@ -25,3 +25,11 @@ class GoodsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goods
         fields = ('weight', 'description', 'location_pick_up', 'location_delivery', 'number_of_nearby_cars')
+
+
+class CarUpdateSerializer(serializers.ModelSerializer):
+    zip_code = serializers.IntegerField(required=True)
+
+    class Meta:
+        model = Car
+        fields = ('unique_number', 'zip_code', 'carrying')
