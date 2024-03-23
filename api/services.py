@@ -69,6 +69,6 @@ def get_goods_with_number_of_nearby_cars(goods_qs: QuerySet[Goods]) -> QuerySet[
             good['car_location']['car_latitude'],
             good['car_location']['car_longitude']
         )
-        cns_nearby_cars += sum(1 for mile in miles_res if mile > 2200)
+        cns_nearby_cars += sum(1 for mile in miles_res if mile <= 450)
 
     return goods_qs.annotate(number_of_nearby_cars=Value(cns_nearby_cars, IntegerField()))
