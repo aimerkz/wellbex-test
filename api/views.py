@@ -1,4 +1,5 @@
 from django_filters import rest_framework as filters
+from django.db import transaction
 
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
@@ -62,6 +63,7 @@ class RetrieveUpdateDeleteGoodsView(RetrieveAPIView, DestroyAPIView, UpdateAPIVi
         serializer = self.get_serializer(res.first())
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
         goods_instance = self.get_object()
         serializer = self.get_serializer(goods_instance, data=request.data)
@@ -80,6 +82,7 @@ class UpdateCarView(UpdateAPIView):
     queryset = Car.objects.all()
     lookup_url_kwarg = 'id'
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
         car_instance = self.get_object()
         serializer = self.get_serializer(car_instance, data=request.data)
