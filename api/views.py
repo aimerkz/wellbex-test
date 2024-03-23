@@ -1,10 +1,10 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from api.models import Goods
 from api.serializers import GoodsCreateSerializer, GoodsListSerializer
-from api.services import GoodsRepo, get_goods_with_number_of_nearby_cars
+from api.services import GoodsRepo, get_goods_with_number_of_nearby_cars, get_detail_goods_qs
 
 
 class CreateGoodsView(ListCreateAPIView):
@@ -33,4 +33,18 @@ class CreateGoodsView(ListCreateAPIView):
         queryset = self.queryset.select_related('location_pick_up', 'location_delivery')
         res = get_goods_with_number_of_nearby_cars(queryset)
         serializer = self.get_serializer(res, many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+
+
+class RetrieveGoodsView(RetrieveAPIView):
+
+    http_method_names = ['get']
+    serializer_class = GoodsListSerializer
+    queryset = Goods.objects.all()
+    lookup_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        instance_qs = get_detail_goods_qs(kwargs.get('id'))
+        res = get_goods_with_number_of_nearby_cars(instance_qs)
+        serializer = self.get_serializer(res.first())
         return Response(status=status.HTTP_200_OK, data=serializer.data)
