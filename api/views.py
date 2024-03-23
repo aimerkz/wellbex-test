@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.response import Response
 
 from api.models import Goods, Car
@@ -36,9 +36,9 @@ class ListCreateGoodsView(ListCreateAPIView):
         return Response(status=status.HTTP_201_CREATED)
 
 
-class RetrieveUpdateGoodsView(RetrieveAPIView, UpdateAPIView):
+class RetrieveUpdateDeleteGoodsView(RetrieveAPIView, DestroyAPIView, UpdateAPIView):
 
-    http_method_names = ['get', 'put']
+    http_method_names = ['get', 'put', 'delete']
     serializer_class = GoodsListSerializer
     queryset = Goods.objects.all()
     lookup_url_kwarg = 'id'
@@ -60,6 +60,9 @@ class RetrieveUpdateGoodsView(RetrieveAPIView, UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
 
 
 class UpdateCarView(UpdateAPIView):
