@@ -20,7 +20,8 @@ class NestedLocationSerializer(serializers.ModelSerializer):
 class GoodsListSerializer(serializers.ModelSerializer):
     location_pick_up = NestedLocationSerializer()
     location_delivery = NestedLocationSerializer()
+    number_of_nearby_cars = serializers.IntegerField()
 
     class Meta:
         model = Goods
-        fields = ('weight', 'description', 'location_pick_up', 'location_delivery')
+        fields = ('weight', 'description', 'location_pick_up', 'location_delivery', 'number_of_nearby_cars')
