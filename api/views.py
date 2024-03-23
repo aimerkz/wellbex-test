@@ -12,7 +12,6 @@ class ListCreateGoodsView(ListCreateAPIView):
     serializer_class = GoodsCreateSerializer
     queryset = Goods.objects.all()
     http_method_names = ['get', 'post']
-    lookup_url_kwarg = 'id'
 
     def get_serializer_class(self, *args, **kwargs):
         if self.request.method == 'GET':
