@@ -154,3 +154,5 @@ cython_debug/
 
 # Pycharm
 .idea/
+
+locations/.~lock*
