@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('create', type=str)
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **kwargs):
         interval, _ = IntervalSchedule.objects.get_or_create(every=3, period='minutes')
         try:
             PeriodicTask.objects.create(
