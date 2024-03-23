@@ -14,7 +14,6 @@ services:
     depends_on:
       - db
       - redis
-      - flower
     env_file:
       - ./.env
 
