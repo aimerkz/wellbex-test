@@ -2,6 +2,20 @@ version: '3.8'
 
 services:
 
+  backend:
+    build:
+      context: .
+    container_name: wellbex-backend
+    restart: always
+    volumes:
+      - static:/wellbex-test/static/
+    ports:
+      - '${APP_PORT}:8000'
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+
   db:
     container_name: wellbex_db
     image: postgres:14.6-alpine
@@ -20,5 +34,6 @@ services:
       - wellbex_data:/var/lib/postgresql/data
 
 volumes:
+  static:
   wellbex_data:
     driver: local
