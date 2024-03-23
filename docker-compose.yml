@@ -5,7 +5,7 @@ services:
   backend:
     build:
       context: .
-    container_name: wellbex-backend
+    container_name: wellbex_backend
     restart: always
     volumes:
       - static:/wellbex-test/static/
