@@ -27,6 +27,13 @@ class GoodsListSerializer(serializers.ModelSerializer):
         fields = ('weight', 'description', 'location_pick_up', 'location_delivery', 'number_of_nearby_cars')
 
 
+class GoodsUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Goods
+        fields = ('weight', 'description')
+
+
 class CarUpdateSerializer(serializers.ModelSerializer):
     zip_code = serializers.IntegerField(required=True)
 
