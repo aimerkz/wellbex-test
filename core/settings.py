@@ -80,8 +80,8 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASS'),
-        'HOST': os.getenv('APP_DB_HOST'),
-        'PORT': os.getenv('APP_DB_PORT'),
+        'HOST': os.getenv('PROD_DB_HOST'),
+        'PORT': os.getenv('PROD_DB_PORT'),
     }
 }
 
@@ -121,8 +121,8 @@ LOGGING = {
     }
 }
 
-REDIS_HOST = os.getenv('REDIS_HOST', default='127.0.0.1')
-REDIS_PORT = os.getenv('REDIS_PORT', default=6379)
+REDIS_HOST = os.getenv('PROD_REDIS_HOST', default='127.0.0.1')
+REDIS_PORT = os.getenv('PROD_REDIS_PORT', default=6379)
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
