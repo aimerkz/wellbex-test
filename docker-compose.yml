@@ -13,6 +13,8 @@ services:
       - '${APP_PORT}:8000'
     depends_on:
       - db
+      - redis
+      - flower
     env_file:
       - ./.env
 
@@ -32,6 +34,58 @@ services:
       retries: 3
     volumes:
       - wellbex_data:/var/lib/postgresql/data
+
+  redis:
+    container_name: wellbex-test-redis
+    image: redis:7.2.4-alpine
+    ports:
+      - "${REDIS_PORT}:6379"
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 5
+
+  flower:
+    image: mher/flower
+    ports:
+      - "${FLOWER_PORT}:5555"
+    environment:
+      - BROKER_URL=redis://redis:${REDIS_PORT}/0
+    depends_on:
+      - redis
+      - celery_worker
+      - celery_beat
+      - db
+      - backend
+    restart:
+      always
+
+  celery_worker:
+    restart: always
+    build:
+      context: .
+    command: celery -A core worker -l info
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+      - backend
+
+  celery_beat:
+    restart: always
+    build:
+      context: .
+    command: celery -A core beat -l info
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+      - backend
+      - celery_worker
+
 
 volumes:
   static:

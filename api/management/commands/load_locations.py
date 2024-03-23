@@ -28,5 +28,5 @@ class Command(BaseCommand):
                         longitude=row['lng']
                     )
                 )
-            Location.objects.bulk_create(locations)
+            Location.objects.bulk_create(objs=locations, batch_size=1000)
         self.stdout.write(self.style.SUCCESS('Locations data loaded successfully'))
