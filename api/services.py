@@ -1,6 +1,6 @@
 from typing import List
 
-from api.exceptions import LocationNotFoundException
+from api.exceptions import LocationNotFoundException, GoodsNotFoundException
 from api.models import Location, Goods, Car
 
 from django.db.models import F, IntegerField, QuerySet, Value
@@ -26,6 +26,13 @@ class GoodsRepo:
             weight=self.weight,
             description=self.description
         )
+
+
+def get_detail_goods_qs(pk: int) -> QuerySet[Goods]:
+    goods_qs = Goods.objects.select_related('location_pick_up', 'location_delivery').filter(pk=pk)
+    if not goods_qs.exists():
+        raise GoodsNotFoundException()
+    return goods_qs
 
 
 def get_location_by_zip_code(zip_code: int) -> Location:
