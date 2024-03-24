@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "wellbex-test"
 authors = ["Artem Merkulov <artem-merk96@yandex.ru>"]
 readme = "README.md"
-packages = [{include = "wellbex_test"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
