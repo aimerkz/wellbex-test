@@ -5,6 +5,7 @@ services:
   backend:
     build:
       context: .
+      dockerfile: ./infra/backend/Dockerfile
     container_name: wellbex_backend
     restart: always
     volumes:
@@ -64,6 +65,7 @@ services:
     restart: always
     build:
       context: .
+      dockerfile: ./infra/celery/worker/Dockerfile
     command: celery -A core worker -l info
     env_file:
       - ./.env
@@ -77,6 +79,7 @@ services:
     restart: always
     build:
       context: .
+      dockerfile: ./infra/celery/beat/Dockerfile
     command: celery -A core beat -l info
     env_file:
       - ./.env
